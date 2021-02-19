@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CPointInTime : MonoBehaviour
+public class CPointInTime 
 {
     public Vector3 position;
     public Quaternion rotation;

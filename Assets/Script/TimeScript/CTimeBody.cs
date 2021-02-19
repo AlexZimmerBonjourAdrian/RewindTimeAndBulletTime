@@ -5,15 +5,19 @@ using UnityEngine;
 public class CTimeBody : MonoBehaviour
 {
 
-    public bool isRewinding = false;
+     bool isRewinding = false;
+    public float recordTime = 5f;
 
-    List<Vector3> positions;
+    List<CPointInTime> pointsInTime;
+
+
+    //List<Vector3> positions;
    // List<CPointInTime> position;
     Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
-        positions = new List<Vector3>();
+        pointsInTime = new List<CPointInTime>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -41,10 +45,12 @@ public class CTimeBody : MonoBehaviour
 
     void Rewind()
     {
-        if(positions.Count > 0)
+       if(pointsInTime.Count>0)
         {
-        transform.position = positions[0];
-        positions.RemoveAt(0);
+            CPointInTime pointInTime = pointsInTime[0];
+            transform.position = pointInTime.position;
+            transform.rotation = pointInTime.rotation;
+            pointsInTime.RemoveAt(0);
         }
         else
         {
@@ -55,7 +61,11 @@ public class CTimeBody : MonoBehaviour
 
     void Record()
     {
-        positions.Insert(0, transform.position);
+       if(pointsInTime.Count > Mathf.Round(recordTime / Time.fixedDeltaTime))
+        {
+            pointsInTime.RemoveAt(pointsInTime.Count - 1);
+        }
+        pointsInTime.Insert(0, new CPointInTime(transform.position, transform.rotation));
     }
 
     void StartRewind()
